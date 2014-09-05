@@ -1,20 +1,21 @@
 package com.blinkbox.books.search.ingester
 
-import com.typesafe.scalalogging.slf4j.StrictLogging
 import akka.util.Timeout
 import akka.actor.ActorRef
 import akka.pattern.ask
+import com.typesafe.scalalogging.slf4j.StrictLogging
 import java.io.IOException
+import java.net.URI
+import java.net.URL
 import org.json4s.jackson.JsonMethods._
 import org.json4s.NoTypeHints
 import org.json4s.jackson.Serialization
 import scala.concurrent.{ Promise, Future, ExecutionContext }
-import spray.http.HttpResponse
-import spray.http.StatusCodes
+import spray.http._
+import spray.http.HttpHeaders._
+import spray.http.HttpMethods._
+import spray.http.ContentTypes._
 import spray.httpx.RequestBuilding._
-import java.net.URL
-import java.net.URI
-import spray.http.Uri
 
 /**
  * Very basic Solr client for posting updates directly as XML.
@@ -25,10 +26,12 @@ class SolrClient(config: SolrConfig, index: String, httpActor: ActorRef)(
   private val updateUrl = Uri(config.url.toExternalForm + s"/$index/update")
 
   // Pass on XML as an Update operation to Solr.
-  def handleXml(data: String): Future[Unit] =
-    (httpActor ? Post(updateUrl, data))
+  def handleXml(data: String): Future[Unit] = {
+    val request = HttpRequest(method = POST, uri = updateUrl, entity = HttpEntity(ContentType(MediaTypes.`application/xml`), data))
+    (httpActor ? request)
       .mapTo[HttpResponse]
       .map(convertSolrResponse(_))
+  }
 
   private def convertSolrResponse(response: HttpResponse) = response match {
     case HttpResponse(StatusCodes.OK, entity, _, _) => ()

@@ -1,0 +1,62 @@
+<book xmlns="http://schemas.blinkbox.com/books/distribution" xmlns:r="http://schemas.blinkbox.com/books/routing" r:originator="quill" r:instance="" rev="" for="distribution"
+	r:version="0.0.4">
+	<isbn>9781905010943</isbn>
+	<title>Eggs and Ashes</title>
+	<subtitle>Practical &amp; liturgical resources for Lent and Holy Week</subtitle>
+	<contributors>
+
+		<contributor role="Author" id="018b2f6b5e3afb5396c3469cb7d8752c3c8e6e68">
+			<displayName>Ruth Burgess</displayName>
+			<sortName>Burgess, Ruth</sortName>
+		</contributor>
+		<contributor role="Author" id="fb782867840e31dd6471b1d01c6631d318e39117">
+			<displayName>Chris Polhill</displayName>
+			<sortName>Polhill, Chris</sortName>
+		</contributor>
+	</contributors>
+	<descriptions>
+		<description format="html" source="Main description">&lt;p&gt;Modern, relevant resources to accompany readers through Lent and Easter for many years, with material for Shrove Tuesday,
+			Ash Wednesday, Mothering Sunday, Palm Sunday and Holy Week, as well as suggestions for a Lent discipline.&lt;/p&gt;</description>
+	</descriptions>
+	<publisher>
+		<name>Wild Goose Publications</name>
+		<username>Dandelion</username>
+		<imprint>Wild Goose Publications</imprint>
+
+		<discountRate>0.3</discountRate>
+	</publisher>
+	<prices>
+		<price currency="GBP" agency="false">
+			<amount>12.34</amount>
+			<tax included="true" />
+		</price>
+		<price currency="GBP" agency="false">
+			<amount>45.67</amount>
+			<tax included="false" />
+		</price>
+	</prices>
+	<subjects>
+		<subject type="BISAC" main="true">REL055020</subject>
+		<subject type="BISAC">OCC011020</subject>
+		<subject type="BISAC">OCC036010</subject>
+		<subject type="BISAC">REL034030</subject>
+		<subject type="BIC">HRCG9</subject>
+		<subject type="BIC">HRCM</subject>
+		<subject type="BIC">HRCR</subject>
+		<subject type="BIC">HRCS</subject>
+		<subject type="BIC">HRLD</subject>
+		<subject type="BIC">VXM</subject>
+		<subject type="BIC Geo">1DBKSHL</subject>
+		<subject type="Keyword">one</subject>
+		<subject type="Keyword">two</subject>
+	</subjects>
+	<language></language>
+	<publishedOn>2004-12-07</publishedOn>
+	<modifiedAt>2013-07-30 14:54:45 UTC</modifiedAt>
+	<regions>
+		<region>WORLD</region>
+	</regions>
+	<media>
+		<cover default="true" size="">http://www.stisonbooks.com/images/books/native/9781905010943.jpg</cover>
+	</media>
+</book>

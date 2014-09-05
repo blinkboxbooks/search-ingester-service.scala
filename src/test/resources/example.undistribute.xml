@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<undistribute xmlns="http://schemas.blinkboxbooks.com/distribution/undistribute/v1"
+              xmlns:r="http://schemas.blinkboxbooks.com/messaging/routing/v1"
+              xmlns:v="http://schemas.blinkboxbooks.com/messaging/versioning"
+              r:timestamp="2013-05-01T16:40:12Z"
+              r:originator="marvin"
+              v:version="1.0">
+    <book ref="isbn">9781905010943</book>
+    <reasonList>
+        <reason>
+            <code>05</code>
+            <description>Issued in error</description>
+            <authorizedBy>
+                <entity>publisher</entity>
+                <name>Super Publishers, UK</name>
+            </authorizedBy>
+        </reason>
+    </reasonList>
+    <effectiveTimestamp>2013-05-01T16:36:59Z</effectiveTimestamp>
+</undistribute>

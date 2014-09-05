@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<add>
+   <doc>
+      <field name="isbn">9781905010943</field>
+      <field name="price" update="set">123.45</field>
+   </doc>
+</add>

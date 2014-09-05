@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<delete commitWithin="6000">
+   <query>isbn:"9781905010943"</query>
+</delete>

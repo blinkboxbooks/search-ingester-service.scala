@@ -29,7 +29,18 @@ class BookMetadataTransformer(xmlHandler: XmlHandler, errorHandler: ErrorHandler
   extends ReliableEventHandler(errorHandler, retryInterval) with StrictLogging {
 
   override def handleEvent(event: Event, originalSender: ActorRef): Future[Unit] = {
-    val xml = XML.load(new ByteArrayInputStream(event.body.content))
+    for (
+        outputMsg <- Future(transformMessage(event.body.content));
+        _ <- xmlHandler.handleXml(outputMsg))
+      yield ()
+  }
+
+  override def isTemporaryFailure(e: Throwable) =
+    e.isInstanceOf[IOException] || e.isInstanceOf[TimeoutException] ||
+      Option(e.getCause).exists(isTemporaryFailure)
+
+  private def transformMessage(bytes: Array[Byte]): String = {
+    val xml = XML.load(new ByteArrayInputStream(bytes))
 
     // Get a suitable Transformer.
     val transformer = xml.label match {
@@ -40,17 +51,11 @@ class BookMetadataTransformer(xmlHandler: XmlHandler, errorHandler: ErrorHandler
     }
 
     // Transform the input.
-    val xmlSource = new StreamSource(new ByteArrayInputStream(event.body.content))
+    val xmlSource = new StreamSource(new ByteArrayInputStream(bytes))
     val output = new StringWriter
     transformer.transform(xmlSource, new StreamResult(output))
-
-    // Pass it on.
-    xmlHandler.handleXml(output.toString)
+    output.toString
   }
-
-  override def isTemporaryFailure(e: Throwable) =
-    e.isInstanceOf[IOException] || e.isInstanceOf[TimeoutException] ||
-      Option(e.getCause).exists(isTemporaryFailure)
 
   // Transformers used for incoming XML messages.
   // These are not thread safe hence an instance created for each Actor.

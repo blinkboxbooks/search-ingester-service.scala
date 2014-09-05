@@ -9,6 +9,8 @@ import com.blinkbox.books.messaging.ActorErrorHandler
 import com.blinkbox.books.rabbitmq.RabbitMqConfirmedPublisher.PublisherConfiguration
 import com.blinkbox.books.rabbitmq._
 import com.typesafe.scalalogging.slf4j.StrictLogging
+import akka.io.IO
+import spray.can.Http
 
 object SearchIngesterService extends App with Configuration with StrictLogging with Loggers {
 
@@ -33,13 +35,15 @@ object SearchIngesterService extends App with Configuration with StrictLogging w
   val bookMsgErrorHandler = new ActorErrorHandler(publisher(appConfig.bookMetadataErrorOutput, "book-error-publisher"))
   val priceMsgErrorHandler = new ActorErrorHandler(publisher(appConfig.priceDataErrorOutput, "price-error-publisher"))
 
-  val solrClient = new SolrClient(appConfig.solr, appConfig.index)
+  // Initialise the Solr client.
+  val httpActor = IO(Http)
+  val solrClient = new SolrClient(appConfig.solr, appConfig.index, httpActor)
 
   val bookMetadataHandler = system.actorOf(Props(
-    new XsltTransformer(solrClient, bookMsgErrorHandler, appConfig.retryTime)), name = "book-metadata-handler")
+    new BookMetadataTransformer(solrClient, bookMsgErrorHandler, appConfig.retryTime)), name = "book-metadata-handler")
 
   val priceDataHandler = system.actorOf(Props(
-    new XsltTransformer(solrClient, bookMsgErrorHandler, appConfig.retryTime)), name = "price-data-handler")
+    new BookMetadataTransformer(solrClient, bookMsgErrorHandler, appConfig.retryTime)), name = "price-data-handler")
 
   // Create and start the actors that consume messages from RabbitMQ.
   system.actorOf(Props(new RabbitMqConsumer(consumerConnection.createChannel, appConfig.bookMetadataInput,

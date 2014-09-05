@@ -25,7 +25,7 @@ trait XmlHandler {
   def handleXml(data: String): Future[Unit]
 }
 
-class XsltTransformer(xmlHandler: XmlHandler, errorHandler: ErrorHandler, retryInterval: FiniteDuration)
+class BookMetadataTransformer(xmlHandler: XmlHandler, errorHandler: ErrorHandler, retryInterval: FiniteDuration)
   extends ReliableEventHandler(errorHandler, retryInterval) with StrictLogging {
 
   override def handleEvent(event: Event, originalSender: ActorRef): Future[Unit] = {
@@ -49,7 +49,6 @@ class XsltTransformer(xmlHandler: XmlHandler, errorHandler: ErrorHandler, retryI
   }
 
   override def isTemporaryFailure(e: Throwable) =
-    // TODO: Consider which exceptions may be returned from the Solr client. 
     e.isInstanceOf[IOException] || e.isInstanceOf[TimeoutException] ||
       Option(e.getCause).exists(isTemporaryFailure)
 

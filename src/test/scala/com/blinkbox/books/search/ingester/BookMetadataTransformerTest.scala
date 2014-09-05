@@ -6,8 +6,10 @@ import com.blinkbox.books.messaging._
 import com.blinkbox.books.test.MockitoSyrup
 import java.io.IOException
 import org.junit.runner.RunWith
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers._
 import org.mockito.Mockito._
+import org.mockito.verification.VerificationMode
 import org.scalatest.BeforeAndAfter
 import org.scalatest.FlatSpecLike
 import org.scalatest.StreamlinedXmlEquality
@@ -18,12 +20,10 @@ import scala.concurrent.duration._
 import scala.io.Source
 import scala.util.Success
 import scala.util.Failure
-import org.mockito.ArgumentCaptor
 import scala.xml.XML
-import org.mockito.verification.VerificationMode
 
 @RunWith(classOf[JUnitRunner])
-class XsltTransformerTest extends TestKit(ActorSystem("test-system")) with ImplicitSender
+class BookMetadataTransformerTest extends TestKit(ActorSystem("test-system")) with ImplicitSender
   with FlatSpecLike with BeforeAndAfter with MockitoSyrup with StreamlinedXmlEquality {
 
   "A book data processor" should "pass on transformed book distribute message" in new TestFixture {
@@ -106,7 +106,7 @@ class XsltTransformerTest extends TestKit(ActorSystem("test-system")) with Impli
     doReturn(Future.successful(())).when(output).handleXml(anyString)
 
     // The actor under test.
-    val handler = TestActorRef(Props(new XsltTransformer(output, errorHandler, retryInterval)))
+    val handler = TestActorRef(Props(new BookMetadataTransformer(output, errorHandler, retryInterval)))
 
     /** Create input event. */
     def event(inputFilename: String) = Event.xml(fileToString(inputFilename), EventHeader.apply("test"))

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<add>
+   <doc>
+      <field name="isbn">9781905010943</field>
+      <field name="title" update="set">Eggs and Ashes</field>
+      <field name="author" update="set">Ruth Burgess</field>
+      <field name="author" update="set">Chris Polhill</field>
+      <field name="author_sort" update="set">Burgess, Ruth, Polhill, Chris</field>
+      <field name="author_guid" update="set">018b2f6b5e3afb5396c3469cb7d8752c3c8e6e68</field>
+      <field name="author_guid" update="set">fb782867840e31dd6471b1d01c6631d318e39117</field>
+      <field name="publication_date" update="set">2004-12-07T00:00:00Z</field>
+      <field name="description" update="set"><![CDATA[&lt;p&gt;Modern, relevant resources to accompany readers through Lent and Easter for many years, with material for Shrove Tuesday,
+			Ash Wednesday, Mothering Sunday, Palm Sunday and Holy Week, as well as suggestions for a Lent discipline.&lt;/p&gt;]]></field>
+      <field update="set" name="keyword">one</field>
+      <field update="set" name="keyword">two</field>
+      <field update="set" name="bisac_subject">REL055020</field>
+      <field update="set" name="bisac_subject">OCC011020</field>
+      <field update="set" name="bisac_subject">OCC036010</field>
+      <field update="set" name="bisac_subject">REL034030</field>
+   </doc>
+</add>

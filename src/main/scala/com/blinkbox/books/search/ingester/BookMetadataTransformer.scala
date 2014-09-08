@@ -1,15 +1,9 @@
 package com.blinkbox.books.search.ingester
 
 import akka.actor.ActorRef
-import com.blinkbox.books.messaging.ErrorHandler
-import com.blinkbox.books.messaging.Event
-import com.blinkbox.books.messaging.ReliableEventHandler
+import com.blinkbox.books.messaging._
 import com.typesafe.scalalogging.slf4j.StrictLogging
-import java.io.ByteArrayInputStream
-import java.io.InputStreamReader
-import java.io.IOException
-import java.io.StringReader
-import java.io.StringWriter
+import java.io._
 import java.util.concurrent.TimeoutException
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.stream.StreamSource
@@ -18,7 +12,6 @@ import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.Future
 import scala.io.Source
 import scala.util.Try
-import scala.xml.NodeSeq
 import scala.xml.XML
 import spray.can.Http.ConnectionException
 

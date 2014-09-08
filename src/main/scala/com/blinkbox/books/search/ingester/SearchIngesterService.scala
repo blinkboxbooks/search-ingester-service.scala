@@ -14,16 +14,15 @@ import spray.can.Http
 
 object SearchIngesterService extends App with Configuration with StrictLogging with Loggers {
 
-  logger.info(s"Starting Credit Offer service")
+  logger.info(s"Starting Search Ingester service")
 
   // Get configuration
   val appConfig = AppConfig(config)
-  val rabbitMqConfig = RabbitMqConfig(config)
-  val consumerConnection = RabbitMq.reliableConnection(RabbitMqConfig(config))
-  val publisherConnection = RabbitMq.recoveredConnection(RabbitMqConfig(config))
+  val consumerConnection = RabbitMq.reliableConnection(appConfig.rabbitMq)
+  val publisherConnection = RabbitMq.recoveredConnection(appConfig.rabbitMq)
 
   // Initialise the actor system.
-  implicit val system = ActorSystem("credit-offer-service")
+  implicit val system = ActorSystem("search-ingester-service")
   implicit val ec = system.dispatcher
   implicit val requestTimeout = Timeout(appConfig.requestTimeout)
 

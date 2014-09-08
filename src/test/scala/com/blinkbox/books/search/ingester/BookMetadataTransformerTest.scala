@@ -68,7 +68,7 @@ class BookMetadataTransformerTest extends TestKit(ActorSystem("test-system")) wi
   it should "retry in case of a temporary error from its output" in new TestFixture {
     // Force a temporary exception to happen when passing on output command to Solr.
     val tempException = new IOException("Test exception")
-    when(output.handleXml(anyString))
+    when(output.handleUpdate(anyString))
       .thenReturn(Future.failed(tempException))
       .thenReturn(Future.failed(tempException))
       .thenReturn(Future.successful(()))
@@ -83,7 +83,7 @@ class BookMetadataTransformerTest extends TestKit(ActorSystem("test-system")) wi
 
   it should "pass in message to error handler for non-temporary errors from its output" in new TestFixture {
     val unrecoverableError = new IllegalArgumentException("Test unrecoverable error")
-    when(output.handleXml(anyString))
+    when(output.handleUpdate(anyString))
       .thenReturn(Future.failed(unrecoverableError))
 
     val inputEvent = event("/example.book.xml")
@@ -99,11 +99,11 @@ class BookMetadataTransformerTest extends TestKit(ActorSystem("test-system")) wi
     val retryInterval = 100.millis
 
     // Define mocks and initialise them with default behaviour.
-    val output = mock[XmlHandler]
+    val output = mock[SolrApi]
     val errorHandler = mock[ErrorHandler]
 
     doReturn(Future.successful(())).when(errorHandler).handleError(any[Event], any[Throwable])
-    doReturn(Future.successful(())).when(output).handleXml(anyString)
+    doReturn(Future.successful(())).when(output).handleUpdate(anyString)
 
     // The actor under test.
     val handler = TestActorRef(Props(new BookMetadataTransformer(output, errorHandler, retryInterval)))
@@ -114,7 +114,7 @@ class BookMetadataTransformerTest extends TestKit(ActorSystem("test-system")) wi
     /** Check that the event was processed successfully by checking the various outputs. */
     def checkSuccessfulResult(expectedFilename: String, attempts: VerificationMode = times(1)) = {
       val outputCaptor = ArgumentCaptor.forClass(classOf[String])
-      verify(output, attempts).handleXml(outputCaptor.capture)
+      verify(output, attempts).handleUpdate(outputCaptor.capture)
 
       val expectedXml = XML.loadString(fileToString(expectedFilename))
       val producedXml = XML.loadString(outputCaptor.getValue)
@@ -132,7 +132,7 @@ class BookMetadataTransformerTest extends TestKit(ActorSystem("test-system")) wi
     /** Check that event processing failed and was treated correctly. */
     def checkFailure[T <: Throwable](event: Event)(implicit manifest: Manifest[T]) {
       // Check no output was given.
-      verify(output, times(0)).handleXml(anyString)
+      verify(output, times(0)).handleUpdate(anyString)
 
       // Check event was passed on to error handler, along with the expected exception.
       val expectedExceptionClass = manifest.runtimeClass.asInstanceOf[Class[T]]

@@ -21,17 +21,14 @@ import java.io.InputStreamReader
 import javax.xml.transform.stream.StreamResult
 import java.io.StringWriter
 
-trait XmlHandler {
-  def handleXml(data: String): Future[Unit]
-}
 
-class BookMetadataTransformer(xmlHandler: XmlHandler, errorHandler: ErrorHandler, retryInterval: FiniteDuration)
+class BookMetadataTransformer(xmlHandler: SolrApi, errorHandler: ErrorHandler, retryInterval: FiniteDuration)
   extends ReliableEventHandler(errorHandler, retryInterval) with StrictLogging {
 
   override def handleEvent(event: Event, originalSender: ActorRef): Future[Unit] = {
     for (
         outputMsg <- Future(transformMessage(event.body.content));
-        _ <- xmlHandler.handleXml(outputMsg))
+        _ <- xmlHandler.handleUpdate(outputMsg))
       yield ()
   }
 
@@ -58,10 +55,10 @@ class BookMetadataTransformer(xmlHandler: XmlHandler, errorHandler: ErrorHandler
   }
 
   // Transformers used for incoming XML messages.
-  // These are not thread safe hence an instance created for each Actor.
-  val bookTransformer = transformer(xsltSource("/book-to-solr.xsl"))
-  val undistributeTransformer = transformer(xsltSource("/undistribute-book.xsl"))
-  val priceTransformer = transformer(xsltSource("/price-to-solr.xsl"))
+  // These are not thread safe hence an instance created for each access.
+  def bookTransformer = transformer(xsltSource("/book-to-solr.xsl"))
+  def undistributeTransformer = transformer(xsltSource("/undistribute-book.xsl"))
+  def priceTransformer = transformer(xsltSource("/price-to-solr.xsl"))
 
   private def transformer(xsltSource: StreamSource) = TransformerFactory.newInstance().newTransformer(xsltSource)
   private def xsltSource(filename: String) = new StreamSource(new InputStreamReader(getClass.getResourceAsStream(filename)))

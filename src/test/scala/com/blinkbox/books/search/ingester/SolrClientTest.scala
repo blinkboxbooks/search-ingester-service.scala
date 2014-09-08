@@ -1,29 +1,25 @@
 package com.blinkbox.books.search.ingester
 
 import akka.actor.ActorSystem
-import akka.testkit.TestKit
-import akka.testkit.TestProbe
-import akka.testkit.ImplicitSender
+import akka.testkit.{ TestKit, TestProbe, ImplicitSender }
 import akka.util.Timeout
-import com.blinkbox.books.test.MockitoSyrup
 import com.blinkbox.books.test.FailHelper
+import com.blinkbox.books.test.MockitoSyrup
 import com.typesafe.config.Config
+import com.typesafe.config.ConfigException
 import com.typesafe.config.ConfigFactory
+import java.io.IOException
 import java.io.StringReader
 import org.junit.runner.RunWith
-import org.scalatest.StreamlinedXmlEquality
 import org.scalatest.BeforeAndAfter
 import org.scalatest.FlatSpecLike
+import org.scalatest.StreamlinedXmlEquality
+import org.scalatest.concurrent.{ AsyncAssertions, Futures, ScalaFutures }
 import org.scalatest.junit.JUnitRunner
-import org.scalatest.concurrent.AsyncAssertions
-import org.scalatest.concurrent.Futures
-import org.scalatest.concurrent.ScalaFutures
 import scala.concurrent.duration._
 import scala.concurrent.Future
-import spray.http.StatusCodes._
 import spray.http._
-import java.io.IOException
-import com.typesafe.config.ConfigException
+import spray.http.StatusCodes._
 
 @RunWith(classOf[JUnitRunner])
 class SolrClientTest extends TestKit(ActorSystem("test-system")) with ImplicitSender with ScalaFutures

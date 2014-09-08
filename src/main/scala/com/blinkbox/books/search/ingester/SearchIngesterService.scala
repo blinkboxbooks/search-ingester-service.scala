@@ -2,6 +2,7 @@ package com.blinkbox.books.search.ingester
 
 import akka.actor.ActorSystem
 import akka.actor.Props
+import akka.io.IO
 import akka.util.Timeout
 import com.blinkbox.books.config.Configuration
 import com.blinkbox.books.logging.Loggers
@@ -9,7 +10,6 @@ import com.blinkbox.books.messaging.ActorErrorHandler
 import com.blinkbox.books.rabbitmq.RabbitMqConfirmedPublisher.PublisherConfiguration
 import com.blinkbox.books.rabbitmq._
 import com.typesafe.scalalogging.slf4j.StrictLogging
-import akka.io.IO
 import spray.can.Http
 
 object SearchIngesterService extends App with Configuration with StrictLogging with Loggers {

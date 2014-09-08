@@ -6,36 +6,37 @@ import com.blinkbox.books.messaging.Event
 import com.blinkbox.books.messaging.ReliableEventHandler
 import com.typesafe.scalalogging.slf4j.StrictLogging
 import java.io.IOException
+import java.io.ByteArrayInputStream
+import java.io.InputStreamReader
+import java.io.StringWriter
 import java.util.concurrent.TimeoutException
-import spray.can.Http.ConnectionException
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.stream.StreamSource
+import javax.xml.transform.stream.StreamResult
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.Future
 import scala.util.Try
 import scala.xml.XML
-import java.io.ByteArrayInputStream
 import scala.xml.NodeSeq
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.stream.StreamSource
+import spray.can.Http.ConnectionException
+import scala.io.Source
 import java.io.StringReader
-import java.io.InputStreamReader
-import javax.xml.transform.stream.StreamResult
-import java.io.StringWriter
-
 
 class BookMetadataTransformer(xmlHandler: SolrApi, errorHandler: ErrorHandler, retryInterval: FiniteDuration)
   extends ReliableEventHandler(errorHandler, retryInterval) with StrictLogging {
 
   override def handleEvent(event: Event, originalSender: ActorRef): Future[Unit] = {
     for (
-        outputMsg <- Future(transformMessage(event.body.content));
-        _ <- xmlHandler.handleUpdate(outputMsg))
-      yield ()
+      outputMsg <- Future(transformMessage(event.body.content));
+      _ <- xmlHandler.handleUpdate(outputMsg)
+    ) yield ()
   }
 
   override def isTemporaryFailure(e: Throwable) =
     e.isInstanceOf[IOException] || e.isInstanceOf[TimeoutException] ||
       Option(e.getCause).exists(isTemporaryFailure)
 
+  /** Carry out XSLT transform on incoming XML. */
   private def transformMessage(bytes: Array[Byte]): String = {
     val xml = XML.load(new ByteArrayInputStream(bytes))
 
@@ -56,11 +57,17 @@ class BookMetadataTransformer(xmlHandler: SolrApi, errorHandler: ErrorHandler, r
 
   // Transformers used for incoming XML messages.
   // These are not thread safe hence an instance created for each access.
-  def bookTransformer = transformer(xsltSource("/book-to-solr.xsl"))
-  def undistributeTransformer = transformer(xsltSource("/undistribute-book.xsl"))
-  def priceTransformer = transformer(xsltSource("/price-to-solr.xsl"))
+  private def bookTransformer = transformer(xsltSource(bookTransform))
+  private def undistributeTransformer = transformer(xsltSource(undistributeTransform))
+  private def priceTransformer = transformer(xsltSource(priceTransform))
 
+  // Only read XSLT files once.
+  private val bookTransform = fromFile("/book-to-solr.xsl")
+  private val undistributeTransform = fromFile("/undistribute-book.xsl")
+  private val priceTransform = fromFile("/price-to-solr.xsl")
+
+  private def fromFile(filename: String) = Source.fromInputStream(getClass.getResourceAsStream(filename)).mkString
   private def transformer(xsltSource: StreamSource) = TransformerFactory.newInstance().newTransformer(xsltSource)
-  private def xsltSource(filename: String) = new StreamSource(new InputStreamReader(getClass.getResourceAsStream(filename)))
+  private def xsltSource(content: String) = new StreamSource(new StringReader(content))
 
 }

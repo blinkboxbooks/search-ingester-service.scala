@@ -2,8 +2,8 @@ package com.blinkbox.books.search.ingester
 
 import com.blinkbox.books.config._
 import com.blinkbox.books.rabbitmq.RabbitMqConsumer
-import com.blinkbox.books.rabbitmq.RabbitMqConfirmedPublisher.PublisherConfiguration
 import com.blinkbox.books.rabbitmq.RabbitMqConfirmedPublisher
+import com.blinkbox.books.rabbitmq.RabbitMqConfirmedPublisher.PublisherConfiguration
 import com.typesafe.config.Config
 import java.net.URL
 import java.util.concurrent.TimeUnit

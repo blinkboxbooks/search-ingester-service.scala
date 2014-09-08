@@ -33,7 +33,7 @@ class BookMetadataTransformer(xmlHandler: SolrApi, errorHandler: ErrorHandler, r
   }
 
   override def isTemporaryFailure(e: Throwable) =
-    e.isInstanceOf[IOException] || e.isInstanceOf[TimeoutException] ||
+    e.isInstanceOf[IOException] || e.isInstanceOf[TimeoutException] || e.isInstanceOf[ConnectionException] ||
       Option(e.getCause).exists(isTemporaryFailure)
 
   /** Carry out XSLT transform on incoming XML. */

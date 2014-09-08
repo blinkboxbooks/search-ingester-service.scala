@@ -7,7 +7,13 @@ Scala version of search ingester service. This consumes XML messages from Rabbit
 
 The service is built as a Scala fat jar, and uses the standard configuration and logging facilities as used by blinkbox books platform services.
 
+### Queues and Exchanges
+
 The service is configured to receive messages from the same RabbitMQ queues as the previous (Java/Mule) version, as described at http://jira.blinkbox.local/confluence/display/REL/Search+Ingester+Service+-+Release+Note. These queues are configured in the reference configuration, so would normally not need to be specified in application config.
+
+***Note:*** this version of the service will also declare an exchange called `Distribution.Book.Search.Exchange`, bound to the `Distribution.Book.Search` queue.
+
+### Solr integration
 
 Updates are passed on to a configured instance of Solr, the URL for which is configured in the application config.
 

@@ -1,0 +1,19 @@
+---
+qa:
+  servers:
+    search: https://qa.mobcastdev.com/service/search/
+
+local:
+  servers:
+    search: http://localhost:56814/service/search/
+    solr:   http://localhost:8983/solr/
+  rabbit:
+    user: guest
+    password: guest
+    host: localhost
+    port: 5672
+
+dev_int:
+  servers:
+    search: https://api.dev.bbbtest2.com/service/search/
+    solr:   http://solr.dev.bbbtest2.com:8983/solr/

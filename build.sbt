@@ -1,6 +1,6 @@
 val buildSettings = Seq(
   organization := "com.blinkbox.books.agora",
-  name := "search-ingester",
+  name := "search-ingester-service",
   version := scala.util.Try(scala.io.Source.fromFile("VERSION").mkString.trim).getOrElse("0.0.0"),
   scalaVersion  := "2.10.4",
   scalacOptions := Seq("-unchecked", "-deprecation", "-feature", "-encoding", "utf8", "-target:jvm-1.7",

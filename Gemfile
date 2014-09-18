@@ -1,0 +1,10 @@
+source 'http://artifactory.blinkbox.local/artifactory/api/gems/bbb-gems/'
+source 'http://artifactory.blinkbox.local/artifactory/api/gems/rubygems/'
+
+gem 'activesupport'
+gem 'cucumber'
+gem 'rake'
+gem 'cucumber-blinkbox'
+gem 'blinkbox-events'
+gem 'http_capture'
+gem 'rspec'

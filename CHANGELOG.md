@@ -1,5 +1,11 @@
 # Change log
 
+## 0.1.2 ([#3](https://git.mobcastdev.com/Agora/search-ingester/pull/3) 2014-09-09 14:38:40)
+
+Copy the smoke tests over from the Mule SI to the Scala implementation
+
+Patch
+
 ## 0.1.1 ([#2](https://git.mobcastdev.com/Agora/search-ingester/pull/2) 2014-09-09 09:01:54)
 
 Rename to avoid clash with old Mule version of service.

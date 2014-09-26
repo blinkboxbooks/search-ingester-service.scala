@@ -21,7 +21,7 @@ object SearchIngesterService extends App with Configuration with StrictLogging w
   val publisherConnection = RabbitMq.recoveredConnection(appConfig.rabbitMq)
 
   // Initialise the actor system.
-  implicit val system = ActorSystem("search-ingester-service")
+  implicit val system = ActorSystem("search-ingester-service", config)
   implicit val ec = system.dispatcher
   implicit val requestTimeout = Timeout(appConfig.requestTimeout)
 

@@ -1,5 +1,13 @@
 # Change log
 
+## 0.1.3 ([#4](https://git.mobcastdev.com/Agora/search-ingester/pull/4) 2014-09-26 17:11:16)
+
+Fixed Akka logging
+
+### Bugfix
+
+- Akka log messages now go to Graylog ([CP-1879](http://jira.blinkbox.local/jira/browse/CP-1879))
+
 ## 0.1.2 ([#3](https://git.mobcastdev.com/Agora/search-ingester/pull/3) 2014-09-09 14:38:40)
 
 Copy the smoke tests over from the Mule SI to the Scala implementation
